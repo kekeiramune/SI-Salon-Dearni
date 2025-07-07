@@ -1,0 +1,80 @@
+/* Warna dan font konsisten dengan halaman utama */
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFC5D3; /* pastel pink background */
+  }
+
+  * {
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+  }
+
+
+ .login-container {
+    background-color: white;
+    padding: 2.5rem 3rem;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .login-container h2 {
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    color: #FF69B4;
+    letter-spacing: 3px;
+  }
+
+  .form-control {
+    border: 2px solid #FF69B4;
+    border-radius: 30px;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #ff00ff;
+    box-shadow: 0 0 8px #ff00ff;
+    outline: none;
+  }
+
+  .btn-login {
+    background-color: #FF69B4;
+    border-color: #FF69B4;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 4px;
+    padding: 0.75rem 1rem;
+    border-radius: 30px;
+    width: 100%;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+  }
+
+  .btn-login:hover {
+    background-color: #FFC5D3;
+    color: #ff00ff;
+    box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff;
+  }
+
+  /* Link lupa password */
+  .forgot-password {
+    display: block;
+    margin-top: 1rem;
+    color: #FF69B4;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+
+  .forgot-password:hover {
+    color: #ff00ff;
+    text-decoration: underline;
+  }
