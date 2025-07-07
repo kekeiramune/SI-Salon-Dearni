@@ -6,6 +6,7 @@ from app.controllers.absensicontroller import absen_bp
 from app.controllers.restockcontroller import restock_bp
 from app.controllers.produkcontroller import produk_bp
 from app.controllers.transaksi_layanancontroller import transaksi_bp
+from app.controllers.layanancontroller import layanan_bp
 
 app = Flask(__name__)
 
@@ -21,6 +22,8 @@ app.register_blueprint(absen_bp)
 app.register_blueprint(produk_bp)
 app.register_blueprint(restock_bp)
 app.register_blueprint(transaksi_bp)
+app.register_blueprint(layanan_bp)
+
 
 @app.route('/')
 def index():
