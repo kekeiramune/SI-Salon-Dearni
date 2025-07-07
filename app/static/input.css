@@ -1,0 +1,105 @@
+* {
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .carousel,
+  .carousel-inner,
+  .carousel-item,
+  .carousel-item img {
+    height: 100vh;
+    min-height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+  }
+
+  .overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    color: white;
+    text-align: center;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+    width: 100%;
+    max-width: 400px;
+    padding: 0 15px;
+  }
+
+  .overlay-content h1 {
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  .overlay-content .btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    padding: 0.75rem;
+    border-radius: 30px;
+  }
+
+.navbar-brand {
+    font-family: "Dancing Script", cursive;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 30px;
+    font-style: normal;
+}
+
+.navbar-collapse {
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.container-fluid {
+    background-color: #FFC5D3;
+}
+
+.btn {
+    border-color: #FF69B4;
+    background-color: #FF69B4;
+    font-weight: 600;
+}
+
+.btn:hover {
+    background-color: #FFC5D3;
+}
+
+.bg-pink-pastel {
+    background-color: #f7c6d5;
+  }
+
+.btn-primary {
+    background-color: #FF69B4 !important;
+    border-color: #FF69B4 !important;
+    font-weight: 700;
+    letter-spacing: 5px;
+    padding: 15px;
+    border-radius: 30px;
+}
+
+.btn-primary:hover {
+    background-color: #FFC5D3 !important;
+    box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff;
+    color: #ff00ff;
+    transition-delay: .3s;
+}
+
+#produkTable {
+    background-color: #FFC5D3;
+}

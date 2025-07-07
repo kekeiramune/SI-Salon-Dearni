@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Staff - Salon Dearni</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Montserrat:ital,wght@0,800;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='input.css') }}" />
+    <style>
+        /* Gaya tambahan atau override jika diperlukan */
+        .bg-pink-pastel { background-color: #fce4ec; /* Contoh warna pink pastel */ }
+        .action-buttons button, .action-buttons a { margin-right: 5px; margin-bottom: 5px; } /* sedikit margin agar tidak terlalu rapat */
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand">Salon Dearni</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Service</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('staff_bp.manage_staffs') }}">Staff</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Produk</a> {# Ganti dengan url_for('product_bp.manage_products') jika ada #}
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">{% if edit_mode_staff %}Edit Staff{% else %}Input Staff Baru{% endif %}</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="list-unstyled">
+                    {% for category, message in messages %}
+                        <li class="alert alert-{{ category }}" role="alert">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('staff_bp.manage_staffs') }}">
+            <input type="hidden" name="action" value="{% if edit_mode_staff %}edit_staff{% else %}add_staff{% endif %}">
+            {% if edit_mode_staff %}
+                <input type="hidden" name="id_staff_edit" value="{{ edit_mode_staff['id_staff'] if edit_mode_staff else '' }}">
+            {% endif %}
+
+            <div class="mb-3">
+                <label for="nama_staff" class="form-label">Nama Staff</label>
+                <input name="nama_staff" type="text" class="form-control" id="nama_staff" placeholder="Masukkan nama staff"
+                       value="{{ edit_mode_staff.nama_staff if edit_mode_staff else '' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="alamat" class="form-label">Alamat</label>
+                <textarea name="alamat" class="form-control" id="alamat" rows="3" placeholder="Masukkan alamat staff" required>{{ edit_mode_staff.alamat if edit_mode_staff else '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="no_telp" class="form-label">No. Telp</label>
+                <input name="no_telp" type="text" class="form-control" id="no_telp" placeholder="Masukkan nomor telepon"
+                       value="{{ edit_mode_staff.no_telp if edit_mode_staff else '' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input name="email" type="email" class="form-control" id="email" placeholder="Masukkan alamat email"
+                       value="{{ edit_mode_staff.email if edit_mode_staff else '' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="posisi" class="form-label">Posisi</label>
+                <input name="posisi" type="text" class="form-control" id="posisi" placeholder="Masukkan posisi staff"
+                       value="{{ edit_mode_staff.posisi if edit_mode_staff else '' }}" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                {% if edit_mode_staff %}Update Staff{% else %}Tambah Staff{% endif %}
+            </button>
+            {% if edit_mode_staff %}
+            <a href="{{ url_for('staff_bp.manage_staffs') }}" class="btn btn-secondary">Batal Edit</a>
+            {% endif %}
+        </form>
+
+        <hr class="my-5">
+
+        <button class="btn btn-info mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#staffTable" aria-expanded="false" aria-controls="staffTable">
+            Tampilkan Daftar Staff
+        </button>
+
+        <div class="collapse" id="staffTable">
+            <div class="card card-body">
+                <h3 class="mb-3">Daftar Staff</h3>
+                {% if staffs %}
+                    <table class="table table-bordered">
+                        <thead class="bg-pink-pastel">
+                            <tr>
+                                <th>ID Staff</th>
+                                <th>Nama Staff</th>
+                                <th>Alamat</th>
+                                <th>No. Telp</th>
+                                <th>Email</th>
+                                <th>Posisi</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for staff_item in staffs %}
+                            <tr>
+                                <td>{{ staff_item.id_staff }}</td>
+                                <td>{{ staff_item.nama_staff }}</td>
+                                <td>{{ staff_item.alamat }}</td>
+                                <td>{{ staff_item.no_telp }}</td>
+                                <td>{{ staff_item.email }}</td>
+                                <td>{{ staff_item.posisi }}</td>
+                                <td class="action-buttons">
+                                    <form action="{{ url_for('staff_bp.manage_staffs') }}" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="load_for_edit">
+                                        <input type="hidden" name="id_staff_load" value="{{ staff_item['id_staff'] }}">
+                                        <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                    </form>
+                                    <form action="{{ url_for('staff_bp.manage_staffs') }}" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete_staff">
+                                        <input type="hidden" name="id_staff_delete" value="{{ staff_item.id_staff }}">
+                                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus staff ini?')" class="btn btn-danger btn-sm">Hapus</button>
+                                    </form>
+                                </td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+                    </table>
+                {% else %}
+                    <p>Tidak ada data staff untuk ditampilkan.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+</html>
