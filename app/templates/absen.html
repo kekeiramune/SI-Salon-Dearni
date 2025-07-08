@@ -132,12 +132,14 @@
             <td>{{ a.status }}</td>
             <td>{{ a.keterangan }}</td>
             <td>
+                {% if session['role'] == 'posisi' or a.id_staff == session['id_staff'] %}
                 {% if a.tanggal == date.today() %}
-                <a href="{{ url_for('absen_bp.edit_absensi', id_absensi=a.id_absensi) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ url_for('absen_bp.edit_absensi', id_absensi=a.id_absensi) }}" class="btn btn-warning btn-sm">Edit</a>
                 {% endif %}
                 <form action="{{ url_for('absen_bp.hapus_absensi', id_absensi=a.id_absensi) }}" method="POST" style="display:inline;">
                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus absensi ini?')">Hapus</button>
                 </form>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}

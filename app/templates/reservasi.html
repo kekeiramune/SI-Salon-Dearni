@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon Dearni</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="{{ url_for('static', filename='input.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Montserrat:ital,wght@0,800;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand">Salon Dearni</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Service</a>
+              </li>
+              <li class="nav-item">
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+      <div class="container mt-5">
+  <h2>Reservasi</h2>
+
+  <!-- Notifikasi -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- Form Tambah Transaksi -->
+  <form method="POST" action="{% if edit_mode_reservasi %}{{ url_for('reservasi_bp.edit_reservasi', id_reservasi=edit_mode_reservasi.id_reservasi) }}{% else %}{{ url_for('reservasi_bp.tambah_reservasi') }}{% endif %}">
+    <input type="hidden" name="action" value="{% if edit_mode_reservasi %}edit_reservasi{% else %}add_reservasi{% endif %}">
+            {% if edit_mode_reservasi %}
+                <input type="hidden" name="id_reservasi_edit" value="{{ edit_mode_reservasi.id_reservasi }}">
+            {% endif %}
+    <div class="mt-3 mb-3">
+      <label>ID/Nama Customer</label>
+      <select name="id_customer" class="form-control">
+        <option value="">-- Pilih Customer --</option>
+        {% for c in customer %}
+        <option value="{{ c.id_customer }}" 
+        {% if edit_mode_reservasi and edit_mode_reservasi.id_customer == c.id_customer %}selected{% endif %}>
+        {{ c.nama_customer }}
+      </option>
+        {% endfor %}
+    </select>
+    </div>
+
+    <div class="mb-3">
+      <label>Tanggal Reservasi</label>
+      <input type="date" name="tanggal_reservasi" class="form-control" 
+       value="{{ edit_mode_reservasi.tanggal_reservasi if edit_mode_reservasi else '' }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Jam Reservasi</label>
+      <input type="time" name="jam_reservasi" class="form-control" value="{{ edit_mode_reservasi.jam_reservasi if edit_mode_reservasi else '' }}" required>
+    </div>
+
+    <div class="mt-3 mb-3">
+      <label>Nama Layanan</label>
+      <select name="id_layanan" class="form-control">
+        <option value="">-- Pilih Layanan --</option>
+        {% for l in layanan %}
+        <option value="{{ l.id_layanan }}" 
+          {% if edit_mode_reservasi and l.id_layanan == edit_mode_reservasi.id_layanan %}selected{% endif %}>
+          {{ l.nama_layanan }}
+        </option>
+        {% endfor %}
+    </select>
+    </div>
+
+    <input type="hidden" name="id_staff" value="{{ edit_mode_reservasi.id_staff if edit_mode_reservasi else random_staff_id }}">
+
+
+    <div class="mb-3">
+      <label>Status</label>
+      <select name="status" class="form-control" required>
+         <option value="">-- Pilih Status --</option>
+         <option value="Selesai" {% if edit_mode_reservasi and edit_mode_reservasi.status == 'Selesai' %}selected{% endif %}>Selesai</option>
+         <option value="Belum Selesai" {% if edit_mode_reservasi and edit_mode_reservasi.status == 'Belum Selesai' %}selected{% endif %}>Belum Selesai</option>
+         <option value="Ditunda" {% if edit_mode_reservasi and edit_mode_reservasi.status == 'Ditunda' %}selected{% endif %}>Ditunda</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      {% if edit_mode_reservasi %}Update Reservasi{% else %}Tambah Reservasi{% endif %}
+    </button>
+    {% if edit_mode_reservasi %}
+    <a href="{{ url_for('reservasi_bp.manage_reservasi') }}" class="btn btn-secondary">Batal Edit</a>
+    {% endif %}
+
+  </form>
+
+  <hr>
+
+  <!-- Tabel untuk proses Transaksi -->
+  <h4>Daftar Reservasi</h4>
+  <table class="table table-bordered mt-3">
+  <thead>
+    <tr>
+      <th>ID Customer</th>
+      <th>Nama Customer</th>
+      <th>Tanggal Reservasi</th>
+      <th>Jam Reservasi</th>
+      <th>Layanan</th>
+      <th>Nama Staff</th>
+      <th>Status</th>
+      <th>Edit Reservasi</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in reservasi %}
+    <tr>
+        <td>{{ r.id_customer }}</td>
+        <td>{{ r.nama_customer }}</td>
+        <td>{{ r.tanggal_reservasi }}</td>
+        <td>{{ r.jam_reservasi }}</td>
+        <td>{{ r.nama_layanan }}</td>
+        <td>{{ r.nama_staff }}</td>
+        <td>
+            {% if r.status == 'Selesai' %}
+                <span class="badge bg-success">Selesai</span>
+            {% elif r.status == 'Belum Selesai' %}
+                <span class="badge bg-primary">Belum Selesai</span>
+            {% elif r.status == 'Ditunda' %}
+                <span class="badge bg-warning text-dark">Ditunda</span>
+            {% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('reservasi_bp.form_edit_reservasi', id_reservasi=r.id_reservasi) }}" class="btn btn-warning btn-sm">Edit</a>
+          <form action="{{ url_for('reservasi_bp.hapus_reservasi', id_reservasi=r.id_reservasi) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus reservasi ini?')">Hapus</button>
+          </form>
+</td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>  
+
+     <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="text-center p-3" style="background-color: #f8f9fa;">
+            © 2025 Salon Dearni
+        </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+</html>

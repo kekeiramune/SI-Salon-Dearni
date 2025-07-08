@@ -35,3 +35,10 @@ def update_restock(id_restock, tanggal_restock, total_biaya, status):
     mysql.connection.commit()
     cursor.close()
     return True
+
+def get_produk_by_restock(id_restock):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT id_produk FROM restock_produk WHERE id_restock=%s", (id_restock,))
+    result = cursor.fetchall()
+    cursor.close()
+    return result

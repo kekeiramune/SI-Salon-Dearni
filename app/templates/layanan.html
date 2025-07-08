@@ -49,7 +49,7 @@
           <p class="card-text">Harga: Rp {{ layanan['harga'] }}</p>
           <p class="card-text">Durasi: {{ layanan['durasi_menit'] }} menit</p>
           <p class="card-text">Kategori: {{ layanan['kategori'] }}</p>
-          <button type="submit" class="btn btn-login">Reservasi</button>
+          <a href="{{ url_for('reservasi_bp.manage_reservasi') }}?id_layanan={{ layanan['id_layanan'] }}" class="btn btn-login">Reservasi</a>
         </div>
       </div>
     </div>

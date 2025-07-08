@@ -100,6 +100,8 @@ def login_staff():
             if staff_data['password'] == password:
                 session['logged_in'] = True
                 session['staff_name'] = staff_data['nama_staff']
+                session['id_staff'] = staff_data['id_staff']
+                session['role'] = staff_data['posisi'] #untuk autorisasi
                 flash('Berhasil login!', 'success')
                 return redirect(url_for('staff_bp.view_staffs'))
             else:
