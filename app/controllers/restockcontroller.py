@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.models import restock, detail_restock, produk
 from datetime import date
+from flask import jsonify
 
 restock_bp = Blueprint('restock_bp', __name__, url_prefix='/restock')
 
@@ -9,7 +10,8 @@ restock_bp = Blueprint('restock_bp', __name__, url_prefix='/restock')
 def manage_restock():
     restock_list = restock.get_all_restock()
     produk_list = produk.get_all_produk()
-    return render_template('restock.html', restock=restock_list, produk=produk_list)
+    detail_list = detail_restock.get_detail_by_restock(id_restock=1)  # Dummy ID for initial load
+    return render_template('restock.html', restock=restock_list, produk=produk_list, detail=detail_list)
 
 # Tambah restock
 @restock_bp.route('/tambah', methods=['POST'])
@@ -29,12 +31,16 @@ def tambah_restock():
 @restock_bp.route('/detail/<int:id_restock>')
 def detailrestock(id_restock):
     restock_data = restock.get_restock_by_id(id_restock)
+    restock_list = restock.get_all_restock()
     detail_list = detail_restock.get_detail_by_restock(id_restock)
     produk_list = produk.get_all_produk()
-    return render_template('restock/detailrestock.html',
+    return render_template('restock.html',
                            restock=restock_data,
+                           restock_list=restock_list,
                            detail=detail_list,
-                           produk=produk_list)
+                           produk=produk_list,
+                           id_restock=id_restock)
+
 
 # Tambah produk ke restock
 @restock_bp.route('/detail/tambah', methods=['POST'])
@@ -63,3 +69,11 @@ def edit_restock(id_restock):
     status = request.form.get('status')
     restock.update_restock(id_restock, tanggal_restock, total_biaya, status)
     return redirect(url_for('restock_bp.manage_restock'))
+
+@restock_bp.route('/get_produk/<int:id_restock>')
+def get_produk_by_restock_route(id_restock):
+    produk_list = restock.get_produk_by_restock(id_restock)
+    if produk_list:
+        return jsonify([p['id_produk'] for p in produk_list])
+    else:
+        return jsonify([])

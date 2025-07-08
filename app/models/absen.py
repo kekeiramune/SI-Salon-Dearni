@@ -2,23 +2,34 @@ from app.config.Database import mysql
 from datetime import date
 
 # --- READ All Absensi ---
-def get_all_absensi():
+def get_all_absensi(id_staff=None, is_owner=False):
     try:
         cursor = mysql.connection.cursor()
-        query = """
-            SELECT 
-                a.id_absensi, a.id_staff, s.nama_staff, a.tanggal, 
-                a.jam_masuk, a.jam_keluar, a.status, a.keterangan
-            FROM absensi a
-            JOIN staff s ON a.id_staff = s.id_staff
-        """
-        cursor.execute(query)
+        if is_owner:
+            query = """
+                SELECT a.id_absensi, a.id_staff, s.nama_staff, a.tanggal, 
+                       a.jam_masuk, a.jam_keluar, a.status, a.keterangan
+                FROM absensi a
+                JOIN staff s ON a.id_staff = s.id_staff
+            """
+            cursor.execute(query)
+        else:
+            query = """
+                SELECT a.id_absensi, a.id_staff, s.nama_staff, a.tanggal, 
+                       a.jam_masuk, a.jam_keluar, a.status, a.keterangan
+                FROM absensi a
+                JOIN staff s ON a.id_staff = s.id_staff
+                WHERE a.id_staff = %s
+            """
+            cursor.execute(query, (id_staff,))
         absens = cursor.fetchall()
         cursor.close()
         return absens
     except Exception as e:
-        print("Error fetching all absensi:", str(e))
+        print("Error fetching absensi:", str(e))
         return None
+
+
 
 
 

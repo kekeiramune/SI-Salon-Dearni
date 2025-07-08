@@ -7,6 +7,8 @@ from app.controllers.restockcontroller import restock_bp
 from app.controllers.produkcontroller import produk_bp
 from app.controllers.transaksi_layanancontroller import transaksi_bp
 from app.controllers.layanancontroller import layanan_bp
+from app.controllers.reservasicontroller import reservasi_bp
+from app.controllers.viewjadwalcontroller import viewreservasi_bp
 
 app = Flask(__name__)
 
@@ -23,6 +25,8 @@ app.register_blueprint(produk_bp)
 app.register_blueprint(restock_bp)
 app.register_blueprint(transaksi_bp)
 app.register_blueprint(layanan_bp)
+app.register_blueprint(reservasi_bp)
+app.register_blueprint(viewreservasi_bp)
 
 
 @app.route('/')
