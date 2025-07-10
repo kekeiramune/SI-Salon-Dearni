@@ -46,16 +46,26 @@ def edit_absensi(id_absensi):
         flash("Data absensi tidak ditemukan.", "danger")
         return redirect(url_for('absen_bp.manage_absensi'))
 
-    # Batasi edit hanya milik sendiri kecuali admin
     if session['role'] != 'owner' and absensi_data['id_staff'] != session['id_staff']:
-        flash("Kamu tidak boleh menghapus absensi staff lain.", "danger")
+        flash("Kamu tidak boleh mengedit absensi staff lain.", "danger")
         return redirect(url_for('absen_bp.manage_absensi'))
 
-
-    # Batas edit hanya hari ini
     if absensi_data['tanggal'] != date.today():
         flash("Absensi hanya bisa diedit di hari yang sama.", "warning")
         return redirect(url_for('absen_bp.manage_absensi'))
+
+    if request.method == 'POST':
+        id_staff = request.form.get('id_staff')
+        tanggal = request.form.get('tanggal')
+        jam_masuk = request.form.get('jam_masuk')
+        jam_keluar = request.form.get('jam_keluar')
+        status = request.form.get('status')
+        keterangan = request.form.get('keterangan')
+        absen.update_absensi(id_absensi, id_staff, tanggal, jam_masuk, jam_keluar, status, keterangan)
+        flash("Absensi berhasil diupdate.", "success")
+        return redirect(url_for('absen_bp.manage_absensi'))
+
+    return render_template('absen.html', edit_mode_absensi=absensi_data, absensi=absen.get_all_absensi(session['id_staff'], session['role'] == 'owner'), staffs=staff.get_all_staffs(), date=date)
 
 
 
