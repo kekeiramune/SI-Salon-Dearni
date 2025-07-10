@@ -29,3 +29,10 @@ def delete_detail(id_detail_restock):
     mysql.connection.commit()
     cursor.close()
     return True
+
+def count_items(id_restock):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT COUNT(*) as count FROM detail_restock WHERE id_restock = %s", (id_restock,))
+    result = cur.fetchone()
+    cur.close()
+    return result['count']
