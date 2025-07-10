@@ -28,24 +28,25 @@
                         <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Service</a>
+                        <a class="nav-link" href="{{ url_for('layanan_bp.daftar_layanan') }}">Service</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('staff_bp.manage_staffs') }}">Staff</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Produk</a> {# Ganti dengan url_for('product_bp.manage_products') jika ada #}
+                        <a class="nav-link" href="#">Produk</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-success" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
 
     <div class="container mt-5">
+        <hr>
+        <div class="mb-3">
+            <a href="{{ url_for('staff_bp.view_staffs') }}" class="btn btn-secondary">Kembali</a>
+        </div>
+        <hr>
         <h2 class="mb-4">{% if edit_mode_staff %}Edit Staff{% else %}Input Staff Baru{% endif %}</h2>
 
         {% with messages = get_flashed_messages(with_categories=true) %}

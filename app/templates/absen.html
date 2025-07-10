@@ -20,23 +20,23 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Service</a>
+                <a class="nav-link" href="{{ url_for('layanan_bp.daftar_layanan') }}">Service</a>
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-success" type="submit">Search</button>
-            </form>
           </div>
         </div>
       </nav>
 
       <div class="container mt-5">
+        <div class="mb-3">
+            <a href="{{ url_for('staff_bp.view_staffs') }}" class="btn btn-secondary">Kembali</a>
+        </div>
+        <hr>
         <h2 class="mb-4">Form Absensi Staff</h2>
-
+        <hr>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class="list-unstyled">
@@ -45,7 +45,7 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-        {% endwith %}
+        {% endwith %}   
 
         <form method="POST" action="{% if edit_mode_absensi %}{{ url_for('absen_bp.edit_absensi', id_absensi=edit_mode_absensi.id_absensi) }}{% else %}{{ url_for('absen_bp.manage_absensi') }}{% endif %}">
             <input type="hidden" name="action" value="{% if edit_mode_absensi %}edit_absen{% else %}add_absen{% endif %}">
