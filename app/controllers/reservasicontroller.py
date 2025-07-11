@@ -37,16 +37,31 @@ def tambah_reservasi():
     tanggal_reservasi = request.form.get('tanggal_reservasi')
     jam_reservasi = request.form.get('jam_reservasi')
     id_layanan = request.form.get('id_layanan')
+    status = request.form.get('status')
+
+    # Cek jika ada jadwal bentrok
+    if reservasi.cek_jadwal_bentrok(tanggal_reservasi, jam_reservasi):
+        flash("Jadwal di tanggal dan jam tersebut sudah penuh. Silakan pilih waktu lain.", "danger")
+        return redirect(url_for('reservasi_bp.manage_reservasi'))
+    if not tanggal_reservasi or not jam_reservasi:
+        flash("Tanggal dan jam reservasi wajib diisi.", "danger")
+        return redirect(url_for('reservasi_bp.manage_reservasi'))
+
+
+    # Random staff
     staff_list = staff.get_all_staffs()
     random_staff = random.choice(staff_list)
     id_staff = random_staff['id_staff']
-    status = request.form.get('status')
+
+    # Add reservasi
     id_reservasi = reservasi.insert_reservasi(id_customer, tanggal_reservasi, jam_reservasi, id_layanan, id_staff, status)
     if id_reservasi:
-        return redirect(url_for('reservasi_bp.manage_reservasi', id_reservasi=id_reservasi))
+        flash("Reservasi berhasil dibuat.", "success")
+        return redirect(url_for('reservasi_bp.manage_reservasi'))
     else:
         flash("Gagal buat reservasi.", 'danger')
         return redirect(url_for('reservasi_bp.manage_reservasi'))
+
     
 # Hapus dari reservasi
 @reservasi_bp.route('/hapus/<int:id_reservasi>', methods=['GET', 'POST'])

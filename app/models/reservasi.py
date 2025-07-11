@@ -64,3 +64,19 @@ def delete_reservasi(id_reservasi):
     mysql.connection.commit()
     cursor.close()
     return True
+
+def cek_jadwal_bentrok(tanggal_reservasi, jam_reservasi):
+    cursor = mysql.connection.cursor()
+    query = """
+        SELECT COUNT(*) as total 
+        FROM reservasi 
+        WHERE tanggal_reservasi = %s AND jam_reservasi = %s
+    """
+    cursor.execute(query, (tanggal_reservasi, jam_reservasi))
+    result = cursor.fetchone()
+    cursor.close()
+    
+    if result and result['total'] > 0:
+        return True
+    else:
+        return False

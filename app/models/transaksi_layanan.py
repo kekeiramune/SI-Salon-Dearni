@@ -15,12 +15,17 @@ def get_all_transaksi():
 def get_reservasi_selesai():
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        SELECT * FROM reservasi
+        SELECT * 
+        FROM reservasi 
         WHERE status = 'Selesai'
+        AND id_reservasi NOT IN (
+            SELECT id_reservasi FROM transaksi_layanan
+        )
     """)
     result = cursor.fetchall()
     cursor.close()
     return result
+
 
 def insert_transaksi(id_reservasi, tanggal_transaksi, total_bayar, metode_pembayaran, status_pembayaran):
     cursor = mysql.connection.cursor()
