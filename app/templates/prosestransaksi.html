@@ -53,11 +53,12 @@
     <div class="mb-3">
       <label>Reservasi (Selesai)</label>
       <select name="id_reservasi" class="form-control" required>
-        <option value="">-- Pilih Reservasi --</option>
+        <option value="">-- Pilih Reservasi Selesai --</option>
         {% for r in reservasi %}
-          <option value="{{ r.id_reservasi }}">{{ r.id_reservasi }} - {{ r.tanggal_reservasi }}</option>
+        <option value="{{ r.id_reservasi }}">{{ r.id_reservasi }}</option>
         {% endfor %}
       </select>
+
     </div>
 
     <div class="mb-3">
